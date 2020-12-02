@@ -1,7 +1,8 @@
 (ns aoc.core
   (:gen-class)
   (:require [clojure.string :as string])
-  (:require [aoc.1-1 :as day-1-part-1]))
+  (:require [aoc.1-1 :as day-1-part-1])
+  (:require [aoc.1-2 :as day-1-part-2]))
 
 (defn -main
   "Run the code for the day/part"
