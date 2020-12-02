@@ -4,20 +4,18 @@
 
 ;; process input to sorted list of integers
 (defn to-int [n] (Integer/parseInt n))
-(defn process-input [input] (sort (map to-int (string/split (string/trim input) #"\n"))))
+(defn process-input [input] (map to-int (string/split (string/trim input) #"\n")))
 
 (def input (process-input (utils/input 1)))
 
-;; this could be more efficient since it doesn't stop when it finds the pair
 (defn find-pair [numbers]
   (first
-   (for [a (reverse numbers)
+   (for [a numbers
          b numbers
-         :let [c (+ a b)]
-         :while (>= 2020 c)
-         :when (= 2020 c)]
+         :when (= 2020 (+ a b))]
      [a, b])))
 
 (defn run []
   (let [[a b] (find-pair input)]
-    (* a b) ))
+    (* a b) )
+  )

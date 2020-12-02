@@ -4,7 +4,7 @@
 
 ;; process input to sorted list of integers
 (defn to-int [n] (Integer/parseInt n))
-(defn process-input [input] (sort (map to-int (string/split (string/trim input) #"\n"))))
+(defn process-input [input] (map to-int (string/split (string/trim input) #"\n")))
 
 (def input (process-input (utils/input 1)))
 
@@ -14,9 +14,8 @@
    (for [a numbers
          b numbers
          c numbers
-         :let [s (reduce + [a b c])]
-         :while (>= 2020 s)
-         :when (= 2020 s)]
+         :let [sum (reduce + [a b c])]
+         :when (= 2020 sum)]
      [a, b, c])))
 
 (defn run []
