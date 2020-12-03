@@ -16,7 +16,7 @@
          c numbers
          :let [sum (reduce + [a b c])]
          :when (= 2020 sum)]
-     [a, b, c])))
+     [a b c])))
 
 (defn run []
   (let [[a b c] (find-three input)]

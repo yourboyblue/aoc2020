@@ -13,7 +13,7 @@
    (for [a numbers
          b numbers
          :when (= 2020 (+ a b))]
-     [a, b])))
+     [a b])))
 
 (defn run []
   (let [[a b] (find-pair input)]
