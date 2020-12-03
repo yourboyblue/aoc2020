@@ -1,6 +1,7 @@
 (ns aoc.core
   (:gen-class)
   (:require [clojure.string :as string])
+  (:require [aoc.2-2 :as day-2-part-2])
   (:require [aoc.2-1 :as day-2-part-1])
   (:require [aoc.1-1 :as day-1-part-1])
   (:require [aoc.1-2 :as day-1-part-2]))
