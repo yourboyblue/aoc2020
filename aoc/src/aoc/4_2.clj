@@ -11,19 +11,20 @@
 
 (defn to-int [n] (Integer/parseInt n))
 
-(defn cid [_v]  (= 1 1))
-(defn byr [val] (<= 1920 (to-int val) 2002))
-(defn iyr [val] (<= 2010 (to-int val) 2020))
-(defn eyr [val] (<= 2020 (to-int val) 2030))
-(defn hcl [val] (re-find #"^#[0-9a-f]{6}$" val))
-(defn pid [val] (re-find #"^[0-9]{9}$" val))
-(defn ecl [val] (contains? eye-colors val))
-(defn hgt [val]
-  (let [[_m num measure] (re-find #"^(\d+)(in|cm)$" val)]
-    (case measure
-      "cm" (<= 150 (to-int num) 193)
-      "in" (<= 59 (to-int num) 76)
-      false)))
+(defn pair-valid? [[key val]]
+  (case key
+    "cid" true
+    "byr" (<= 1920 (to-int val) 2002)
+    "iyr" (<= 2010 (to-int val) 2020)
+    "eyr" (<= 2020 (to-int val) 2030)
+    "hcl" (re-find #"^#[0-9a-f]{6}$" val)
+    "pid" (re-find #"^[0-9]{9}$" val)
+    "ecl" (contains? eye-colors val)
+    "hgt" (let [[_m num units] (re-find #"^(\d+)(in|cm)$" val)]
+            (case units
+              "cm" (<= 150 (to-int num) 193)
+              "in" (<= 59 (to-int num) 76)
+              false))))
 
 (defn pp-pairs [pp-str]
   (map #(string/split % #":") (string/split pp-str #"(\s|\n)")))
@@ -33,15 +34,10 @@
        (map first)
        (set)))
 
-(defn valid-pairs?
-  "For each pair, call the fn name key with the value"
-  [pairs]
-  (->> pairs
-       (every? (fn [[k v]]
-                 (let [fn-sym (resolve (symbol (str "aoc.4-2/" k)))]
-                   (apply fn-sym [v]))))))
-
 (defn run []
-  (let [pps-with-keys (filter #(set/subset? req-keys (pp-keys %)) input)]
-    (count (filter valid-pairs? (map pp-pairs pps-with-keys)))))
+  (let [pps-to-check (filter #(set/subset? req-keys (pp-keys %)) input)]
+    (->> pps-to-check
+         (map pp-pairs)
+         (filter #(every? pair-valid? %))
+         (count))))
 
