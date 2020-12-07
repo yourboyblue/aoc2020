@@ -15,6 +15,5 @@
 (defn run []
   (->> input
        (map count-group)
-       (flatten)
        (reduce +)))
 
