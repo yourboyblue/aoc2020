@@ -1,33 +1,24 @@
 (ns aoc.7-2
   (:require [clojure.string :as string])
-  (:require [clojure.set :as set])
   (:require [aoc.utils :as utils]))
 
 (def day 7)
 (def input (string/split-lines (utils/input day)))
 
-(defn to-int [i] (Integer/parseInt i))
+(defn nested-bag-list [[count adj color]]
+  (repeat (Integer/parseInt count) (str adj color)))
 
-(defn bag-key [adj color] (str adj "-" color))
-
-(defn list-from-bag [bag]
-  (let [[count adj color] (map string/trim (string/split bag #" "))]
-    (case count
-      "no" []
-      (repeat (to-int count) (bag-key adj color)))))
-
-(defn parse-bag-defns
-  "Return a map with the bag as the key, and a vector of bags it can contain as the value
-   {wavy-indigo [clear-turquoise clear-turquoise clear-turquoise drab-bronze]}"
+(defn parse-line
+  "Return a map of the bag to its contents:
+   {wavyindigo [clearturquoise clearturquoise clearturquoise drabbronze]}"
   [line]
-  (let [[key rest] (string/split line #"contain")
-        [adj color] (subvec (string/split key #" ") 0 2)
-        bag-contents (->> (string/split rest #",")
-                          (map string/trim)
-                          (map list-from-bag)
-                          (flatten))]
+  (let [[bag contents] (string/split line #" contain ")
+        [adj color] (subvec (string/split bag #" ") 0 2)]
 
-    {(bag-key adj color) bag-contents}))
+    {(str adj color) (->> (string/split contents #", ")
+                          (map #(string/split % #" "))
+                          (filter #(>= (count %) 4))
+                          (mapcat nested-bag-list))}))
 
 (defn expand-contents [bags contents]
   (loop [remaining contents expanded-contents []]
@@ -39,8 +30,8 @@
                (conj expanded-contents head))))))
 
 (defn run []
-  (let [bags (reduce merge (map parse-bag-defns input))
-        my-bag (bags "shiny-gold")
+  (let [bags (into {} (map parse-line input))
+        my-bag (bags "shinygold")
         my-bag-contents (expand-contents bags my-bag)]
     (count my-bag-contents)))
 
