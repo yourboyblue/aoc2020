@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+dir = File.join(__dir__, '..', 'lib')
+puts dir
+Dir.each_child(dir) do |filename|
+  require File.join(dir, filename)
+end
+
+
+# (If you use this, don't forget to add pry to your Gemfile!)
+# require "pry"
+# Pry.start
+
+require "irb"
+IRB.start(__FILE__)
