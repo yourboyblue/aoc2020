@@ -1,7 +1,7 @@
 module FileHelper
   def read_data(filename)
     puts data_path(filename)
-    File.readlines(data_path(filename), "\n")
+    File.readlines(data_path(filename), chomp: true)
   end
 
   def data_path(filename)
