@@ -35,17 +35,13 @@ class Day16
     arr.scan(/\d+/).map(&:to_i)
   end
 
-  def ranges
-    @ranges ||= @fields
-  end
-
   def mark_tickets
     marks = Hash.new { |h,k| h[k] = [] }
     tickets_to_check = [@my_ticket, *valid_tickets]
 
     # across each ticket, record if the ticket number location is a match for the label
     all = tickets_to_check.each_with_index do |ticket, ti|
-      ranges.each do |label, matchers|
+      @ranges.each do |label, matchers|
         marks[label] << []
         ticket.each_with_index do |number, ni|
           marks[label][ti][ni] = matchers.any? { |m| m.cover?(number) }
@@ -78,7 +74,7 @@ class Day16
   def valid_tickets
     @tickets.reject do |ticket|
       ticket.any? do |number|
-        ranges.values.all? do |range|
+        @ranges.values.all? do |range|
           range.none? do |segment|
             segment.cover?(number)
           end
@@ -90,7 +86,7 @@ class Day16
   def invalid_numbers
     @tickets.flat_map do |ticket|
       ticket.select do |number|
-        ranges.values.all? do |range|
+        @ranges.values.all? do |range|
           range.none? do |segment|
             segment.cover?(number)
           end
